@@ -64,8 +64,11 @@ USER $USERNAME
 # Set the working directory to the user's home directory
 WORKDIR /home/$USERNAME
 
-# Create empty .zshrc file
-RUN touch .zshrc
+# Install chezmoi in ~/.local/bin
+RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)"
+
+# Create a .zshrc file and add ~/.local/bin to PATH
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> .zshrc
 
 # Set Zsh as the default shell
 SHELL ["/bin/zsh", "-c"]
