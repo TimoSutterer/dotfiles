@@ -31,6 +31,33 @@ RUN groupadd --gid $USER_GID $USERNAME && \
     useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
     echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Install Docker and Docker Compose
+RUN apt-get update && \
+    # Add Docker's official GPG key
+    apt-get install -y ca-certificates curl && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg \
+    -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    # Add the repository to apt sources
+    echo \
+    "deb [arch=$(dpkg --print-architecture) \
+    signed-by=/etc/apt/keyrings/docker.asc] \
+    https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    # Install the latest version
+    apt-get update && \
+    apt-get install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin && \
+    # Clean up apt cache to reduce image size
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Switch to the non-root user
 USER $USERNAME
 
