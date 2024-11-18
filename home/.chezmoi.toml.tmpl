@@ -1,0 +1,7 @@
+{{- $gitUserName := promptStringOnce . "gitUserName" "Git Name" -}}
+{{- $gitUserEmail := promptStringOnce . "gitUserEmail" "Git E-Mail" -}}
+
+[data]
+    gitUserName = {{ if eq $gitUserName "" }}false{{ else }}{{ $gitUserName | quote }}{{ end }}
+    gitUserEmail = {{ if eq $gitUserEmail "" }}false{{ else }}{{ $gitUserEmail | quote }}{{ end }}
+

@@ -1,0 +1,7 @@
+[user]
+{{- if .gitUserName }}
+    name = {{ .gitUserName }}
+{{ end -}}
+{{- if .gitUserEmail }}
+    email = {{ .gitUserEmail }}
+{{ end -}}
