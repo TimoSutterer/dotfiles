@@ -64,11 +64,9 @@ USER $USERNAME
 # Set the working directory to the user's home directory
 WORKDIR /home/$USERNAME
 
-# Install chezmoi in ~/.local/bin
-RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)"
-
-# Create a .zshrc file and add ~/.local/bin to PATH
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> .zshrc
+# Install chezmoi in ~/.local/bin and initialize the repository
+ARG CHEZMOI_REPO=TimoSutterer
+RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply $CHEZMOI_REPO
 
 # Set Zsh as the default shell
 SHELL ["/bin/zsh", "-c"]
