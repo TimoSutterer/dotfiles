@@ -86,9 +86,20 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | b
 # not set in Debian containers
 ENV PATH=$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
-# Install chezmoi in ~/.local/bin and initialize the repository
+# Copy the local repository into the container
+COPY --chown=$USERNAME:$USERNAME . $HOME/.local/share/chezmoi
+# Install chezmoi in ~/.local/bin
+RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)"
+# Install dotfiles
 ARG CHEZMOI_REPO=TimoSutterer
-RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply $CHEZMOI_REPO
+RUN if [ -z "$CHEZMOI_REPO" ]; then \
+        # CHEZMOI_REPO is empty, use local repository
+        $HOME/.local/bin/chezmoi init --apply; \
+    else \
+        # CHEZMOI_REPO is not empty, use repository from URL
+        rm -rf $HOME/.local/share/chezmoi && \
+        $HOME/.local/bin/chezmoi init --apply $CHEZMOI_REPO; \
+    fi
 
 # Set Zsh as the default shell
 SHELL ["/bin/zsh", "-c"]
