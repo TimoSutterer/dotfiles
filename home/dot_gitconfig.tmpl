@@ -1,7 +1,7 @@
 [user]
-{{- if .gitUserName }}
+{{- if ne .gitUserName "" }}
     name = {{ .gitUserName }}
-{{ end -}}
-{{- if .gitUserEmail }}
+{{- end -}}
+{{- if ne .gitUserEmail "" }}
     email = {{ .gitUserEmail }}
-{{ end -}}
+{{- end }}

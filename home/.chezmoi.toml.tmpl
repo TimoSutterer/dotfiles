@@ -1,7 +1,28 @@
-{{- $gitUserName := promptStringOnce . "gitUserName" "Git Name" -}}
-{{- $gitUserEmail := promptStringOnce . "gitUserEmail" "Git E-Mail" -}}
+{{- /* Check if running interactively */ -}}
+{{- $interactive := stdinIsATTY -}}
+
+{{- /* Initialize the gitUserName variable with an empty value */ -}}
+{{- $gitUserName := "" -}}
+{{- /* If gitUserName was previously set, reuse it */ -}}
+{{- if and (hasKey . "gitUserName") (ne .gitUserName "") -}}
+{{-   $gitUserName = .gitUserName -}}
+{{- /* Otherwise, if running interactively, prompt for a name */ -}}
+{{- else if $interactive -}}
+{{-   $gitUserName = promptString "Git Name" -}}
+{{- end -}}
+
+{{- /* Same for gitUserEmail */ -}}
+{{- $gitUserEmail := "" -}}
+{{- if and (hasKey . "gitUserEmail") (ne .gitUserEmail "") -}}
+{{-   $gitUserEmail = .gitUserEmail -}}
+{{- else if $interactive -}}
+{{-   $gitUserEmail = promptString "Git Email" -}}
+{{- end -}}
+
+{{- if $interactive -}}
+{{-   writeToStdout "💡 Tip: to adjust previously entered values, use `chezmoi init --data=false`.\n" -}}
+{{- end -}}
 
 [data]
-    gitUserName = {{ if eq $gitUserName "" }}false{{ else }}{{ $gitUserName | quote }}{{ end }}
-    gitUserEmail = {{ if eq $gitUserEmail "" }}false{{ else }}{{ $gitUserEmail | quote }}{{ end }}
-
+    gitUserName = {{ $gitUserName | quote }}
+    gitUserEmail = {{ $gitUserEmail | quote }}
