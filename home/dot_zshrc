@@ -1,2 +1,43 @@
 # Add ~/.local/bin to PATH to support user-installed tools like chezmoi
 export PATH="$HOME/.local/bin:$PATH"
+
+# Set the NVM_DIR environment variable
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && \
+printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# Load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+### START deeper nvm shell integration
+# Whenever you enter a directory that contains an .nvmrc file with a string
+# telling nvm which node to use, installs (if needed) and `nvm use`s the
+# specified Node.js version and `nvm use default` otherwise.
+# https://github.com/nvm-sh/nvm/blob/master/README.md#deeper-shell-integration
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  # Check if nvm is available
+  if ! command -v nvm > /dev/null; then
+    echo "Skipping load-nvmrc (nvm is not installed or not initialized)."
+    return
+  fi
+  local nvmrc_path
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version
+    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use
+    fi
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+### END deeper nvm shell integration

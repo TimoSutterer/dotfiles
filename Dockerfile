@@ -61,8 +61,30 @@ RUN apt-get update && \
 # Switch to the non-root user
 USER $USERNAME
 
+# Set the HOME environment variable
+ENV HOME=/home/$USERNAME
 # Set the working directory to the user's home directory
-WORKDIR /home/$USERNAME
+WORKDIR $HOME
+
+# Install nvm, Node.js and npm
+ARG NODE_VERSION=22.11.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash && \
+    # Set the NVM_DIR environment variable
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && \
+    printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" && \
+    # Load nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+    # Install Node.js
+    nvm install $NODE_VERSION && \
+    # Activate the specified Node.js version
+    nvm use $NODE_VERSION && \
+    # Set the specified Node.js version as default for nvm
+    nvm alias default $NODE_VERSION
+
+# Add nvm and Node.js to PATH
+# It is assumed that $NVM_DIR is $HOME/.nvm because $XDG_CONFIG_HOME is usually
+# not set in Debian containers
+ENV PATH=$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install chezmoi in ~/.local/bin and initialize the repository
 ARG CHEZMOI_REPO=TimoSutterer
