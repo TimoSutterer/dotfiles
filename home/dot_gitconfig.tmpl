@@ -1,3 +1,5 @@
+[core]
+    hooksPath = ~/.git-hooks
 [user]
 {{- if ne .gitUserName "" }}
     name = {{ .gitUserName }}
@@ -5,3 +7,4 @@
 {{- if ne .gitUserEmail "" }}
     email = {{ .gitUserEmail }}
 {{- end }}
+
