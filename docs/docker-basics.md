@@ -50,6 +50,23 @@ Common flags:
 - `-i` (interactive): Keeps STDIN open
 - `-t` (tty): Allocates a pseudo-TTY
 
+### `docker cp`
+
+Copies files/folders between a container and the local filesystem.
+
+```bash
+# Copy from host to container
+docker cp /path/on/host container_name:/path/in/container
+
+# Copy from container to host
+docker cp container_name:/path/in/container /path/on/host
+
+# Copy directory contents (including hidden files)
+docker cp /local/dir/. container_name:/container/dir/
+```
+
+> **Note:** For detailed examples and important caveats about permissions and symbolic links, see [Copying Files Between Host and Container](docker-run.md#copying-files-between-host-and-container).
+
 ### `docker rm`
 
 Removes one or more containers.

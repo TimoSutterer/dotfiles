@@ -8,7 +8,7 @@ Builds a Docker image from the current directory using default settings and tags
 docker build -t dotfiles .
 ```
 
-> **Note:** This command uses the local Dockerfile, but still fetches the dotfiles from the GitHub repo. See [Using Local Repository](#using-local-repository) below for how to use your local dotfiles repository as well.
+> **Note:** This command uses the local Dockerfile, but still fetches the dotfiles from the TimoSutterer/dotfiles GitHub repo. See [Using Local Repository](#using-local-repository) below for how to use your local dotfiles repository as well.
 
 ## Customizing the Build
 
@@ -24,19 +24,19 @@ docker build --build-arg CHEZMOI_REPO= -t dotfiles .
 
 ```bash
 docker build \
-    --build-arg USERNAME=$(whoami) \
-    --build-arg USER_UID=$(id -u) \
-    --build-arg USER_GID=$(id -g) \
-    --build-arg NODE_VERSION=22.11.0 \
-    --build-arg CHEZMOI_REPO=TimoSutterer \
-    -t dotfiles .
+  --build-arg USERNAME=$(whoami) \
+  --build-arg USER_UID=$(id -u) \
+  --build-arg USER_GID=$(id -g) \
+  --build-arg NODE_VERSION=22.11.0 \
+  --build-arg CHEZMOI_REPO=TimoSutterer \
+  -t dotfiles .
 ```
 
 - **USERNAME** - Container username
 - **USER_UID** - User ID
 - **USER_GID** - Group ID
 - **NODE_VERSION** - Node.js version to install
-- **CHEZMOI_REPO** - GitHub repo for dotfiles, use empty string for [local repository](#using-local-repository)
+- **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)
 
 > **Important:** Setting the USERNAME, USER_UID, and USER_GID is particularly important when mounting directories from your host system. Learn more about [Docker Mounts and Permissions](docker-mounts.md).
 

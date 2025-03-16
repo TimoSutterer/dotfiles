@@ -16,9 +16,9 @@ Mount your projects directory to work on host files from within the container:
 
 ```bash
 docker run -it \
-    --name dev-environment \
-    -v ~/Projects:/home/$(whoami)/Projects \
-    timosutterer/dotfiles
+  --name dev-environment \
+  -v /home/$(whoami)/Projects:/home/$(whoami)/Projects \
+  timosutterer/dotfiles
 ```
 
 > **Note:** When using volume mounts, be aware of the implications. See [Important Notes on Volume Mounts](docker-mounts.md).
@@ -29,9 +29,9 @@ To use Docker commands inside the container that interact with the host Docker d
 
 ```bash
 docker run -it \
-    --name docker-in-docker \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    timosutterer/dotfiles
+  --name docker-in-docker \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  timosutterer/dotfiles
 ```
 
 > **Note:** This gives the container access to your host's Docker daemon. Be careful with permission implications.
@@ -45,7 +45,7 @@ docker run \
   -it \
   --rm \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v ~/Projects:/home/$(whoami)/Projects \
+  -v /home/$(whoami)/Projects:/home/$(whoami)/Projects \
   -e TZ=Europe/Amsterdam \
   --name dotfiles-dev \
   --hostname dotfiles-dev \
@@ -153,7 +153,7 @@ docker exec dotfiles-dev git status
 
 ### Ephemeral Usage Workflow
 
-Use a container temporarily and discard it after use:
+**Use a container temporarily and discard it after use**:
 
 ```bash
 docker run -it --rm timosutterer/dotfiles
@@ -179,4 +179,45 @@ docker exec -it dotfiles-daemon zsh
 
 ```bash
 docker stop dotfiles-daemon
+```
+
+## Copying Files Between Host and Container
+
+### Using the `docker cp` Command
+
+The `docker cp` command allows you to copy files or directories between a container and the local filesystem:
+
+**Copy a configuration file to a running container**:
+
+```bash
+docker cp ~/.vimrc dotfiles-dev:/home/$(whoami)/.vimrc
+```
+
+**Copy a project from a container to your host**:
+
+```bash
+docker cp dotfiles-dev:/home/$(whoami)/Projects/myproject ./myproject-backup
+```
+
+**Copy directory contents including hidden files from host to container**:
+
+```bash
+docker cp ~/.config/. dotfiles-dev:/home/$(whoami)/.config/
+```
+
+> **Important:** When using `docker cp`:
+>
+> - Files copied with `docker cp` will inherit the ownership of the destination directory by default.
+> - `docker cp` follows symbolic links from the source.
+
+### Using `tar` for Efficient Transfers
+
+For transferring multiple files or preserving permissions:
+
+```bash
+# Pack on host and extract in container
+tar -czf - -C /path/to/source . | docker exec -i container_name tar -xzf - -C /destination
+
+# Pack in container and extract on host
+docker exec -i container_name tar -czf - -C /source . | tar -xzf - -C /path/to/destination
 ```
