@@ -12,6 +12,7 @@ RUN apt-get update && \
     curl \
     sudo \
     gnupg \
+    neovim \
     locales \
     # Install packages required for building Python
     # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
