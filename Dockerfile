@@ -12,7 +12,12 @@ RUN apt-get update && \
     curl \
     sudo \
     gnupg \
-    locales && \
+    locales \
+    # Install packages required for building Python
+    # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+    build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
+    libsqlite3-dev curl git libncursesw5-dev xz-utils tk-dev libxml2-dev \
+    libxmlsec1-dev libffi-dev liblzma-dev && \
     # Clean up apt cache to reduce image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -85,6 +90,17 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | b
 # It is assumed that $NVM_DIR is $HOME/.nvm because $XDG_CONFIG_HOME is usually
 # not set in Debian containers
 ENV PATH=$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+
+# Install pyenv and Python
+ARG PYTHON_VERSION=3.13.2
+RUN curl -fsSL https://pyenv.run | bash && \
+    # Add pyenv to PATH
+    export PYENV_ROOT="$HOME/.pyenv" && \
+    export PATH="$PYENV_ROOT/bin:$PATH" && \
+    # Install Python
+    pyenv install $PYTHON_VERSION && \
+    # Set the specified Python version as global
+    pyenv global $PYTHON_VERSION
 
 # Copy the local repository into the container
 COPY --chown=$USERNAME:$USERNAME . $HOME/.local/share/chezmoi

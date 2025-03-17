@@ -28,6 +28,7 @@ docker build \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
   --build-arg NODE_VERSION=22.11.0 \
+  --build-arg PYTHON_VERSION=3.13.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .
 ```
@@ -36,6 +37,7 @@ docker build \
 - **USER_UID** - User ID
 - **USER_GID** - Group ID
 - **NODE_VERSION** - Node.js version to install
+- **PYTHON_VERSION** - Python version to install
 - **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)
 
 > **Important:** Setting the USERNAME, USER_UID, and USER_GID is particularly important when mounting directories from your host system. Learn more about [Docker Mounts and Permissions](docker-mounts.md).
