@@ -1,0 +1,28 @@
+name: Validate Pull Request
+on: pull_request
+
+permissions:
+  contents: read # for the checkout action
+
+jobs:
+  lint-commits:
+    name: Lint Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run Lint Commits Action
+        uses: ./.github/actions/lint-commits
+
+  build-docker-image:
+    # This job exists just to make sure the Dockerfile can be built. Nothing
+    # else is done with the image in this workflow.
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Build Docker Action
+        uses: ./.github/actions/build-docker-image

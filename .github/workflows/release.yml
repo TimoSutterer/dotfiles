@@ -1,0 +1,141 @@
+name: Release
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read # for the checkout action
+
+jobs:
+  lint-commits:
+    name: Lint Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run Lint Commits Action
+        uses: ./.github/actions/lint-commits
+
+  build-docker-image:
+    # This job exists just to make sure the Dockerfile can be built. Nothing
+    # else is done with the image in this workflow.
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Docker Image
+        uses: ./.github/actions/build-docker-image
+
+  release:
+    name: Release
+    needs: [lint-commits, build-docker-image]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
+      - name: Release
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create a temporary file to capture the output
+          OUTPUT_FILE=$(mktemp)
+
+          # Run semantic-release and capture the JSON output
+          npx semantic-release --dry-run | tee $OUTPUT_FILE
+
+          # Extract the new version if available
+          if grep -q "next release version is" $OUTPUT_FILE; then
+            NEW_VERSION=$(grep "next release version is" $OUTPUT_FILE | sed -E 's/.*next release version is ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+            echo "new_release_version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "new_release_published=true" >> $GITHUB_OUTPUT
+            
+            # Now run the actual release
+            npx semantic-release
+          else
+            echo "No new release detected"
+            echo "new_release_published=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Clean up
+          rm $OUTPUT_FILE
+
+  push-to-registry:
+    name: Push Docker Image to Docker Hub
+    # Only run this job if the release job was successful and a new release was
+    # published
+    needs: [release]
+    if: needs.release.outputs.new_release_published == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      id-token: write # needed for signing the images with OIDC token
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/dotfiles
+          tags: |
+            type=semver,pattern={{version}},value=${{ needs.release.outputs.new_release_version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.release.outputs.new_release_version }}
+            type=semver,pattern={{major}},value=${{ needs.release.outputs.new_release_version }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          sbom: true # Generate SBOM attestation
+      - name: Generate up-to-date Docker Hub README
+        run: |
+          # Get direct version from semantic-release output
+          VERSION="${{ needs.release.outputs.new_release_version }}"
+          # Remove 'v' prefix if present
+          VERSION="${VERSION#v}"
+
+          # Replace placeholders in the template
+          sed -e "s/{{LATEST_VERSION}}/$VERSION/g" \
+              -e "s/{{MAJOR_MINOR}}/${VERSION%.*}/g" \
+              -e "s/{{MAJOR}}/${VERSION%%.*}/g" \
+              DOCKER_README.template.md > DOCKER_README.md
+      - name: Update Docker Hub Description
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/dotfiles
+          short-description: Development environment with dotfiles configured for immediate productivity.
+          readme-filepath: ./DOCKER_README.md
