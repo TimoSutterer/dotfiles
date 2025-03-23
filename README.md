@@ -14,7 +14,7 @@ On a new machine:
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply TimoSutterer
 ```
 
-Containerized:
+[Containerized](https://hub.docker.com/r/timosutterer/dotfiles):
 
 ```
 docker run -it timosutterer/dotfiles
