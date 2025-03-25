@@ -11,6 +11,7 @@ RUN apt-get update && \
     git \
     curl \
     sudo \
+    tmux \
     gnupg \
     neovim \
     locales \
@@ -121,5 +122,5 @@ RUN if [ -z "$CHEZMOI_REPO" ]; then \
         $HOME/.local/bin/chezmoi init --apply $CHEZMOI_REPO; \
     fi
 
-# Use Zsh as the default process for the container
-CMD ["zsh"]
+# Set the default command to start or attach to a tmux session named 'default'
+CMD ["tmux", "new-session", "-A", "-s", "default"]
