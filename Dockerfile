@@ -23,6 +23,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Set Zsh as the default shell
+ENV SHELL=/bin/zsh
+
 # Set up locales
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
@@ -117,9 +120,6 @@ RUN if [ -z "$CHEZMOI_REPO" ]; then \
         rm -rf $HOME/.local/share/chezmoi && \
         $HOME/.local/bin/chezmoi init --apply $CHEZMOI_REPO; \
     fi
-
-# Set Zsh as the default shell
-SHELL ["/bin/zsh", "-c"]
 
 # Use Zsh as the default process for the container
 CMD ["zsh"]
