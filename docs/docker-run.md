@@ -17,7 +17,7 @@ Mount your projects directory to work on host files from within the container:
 ```bash
 docker run -it \
   --name dev-environment \
-  -v /home/$(whoami)/Projects:/home/$(whoami)/Projects \
+  -v /home/$(whoami)/projects:/home/$(whoami)/projects \
   timosutterer/dotfiles
 ```
 
@@ -43,10 +43,10 @@ A full-featured development container with timezone, hostname, Docker access and
 ```bash
 docker run \
   -it \
-  --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /home/$(whoami)/Projects:/home/$(whoami)/Projects \
   -e TZ=Europe/Amsterdam \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /home/$(whoami)/shared:/home/$(whoami)/shared \
+  -v /home/$(whoami)/projects:/home/$(whoami)/projects \
   --name dotfiles-dev \
   --hostname dotfiles-dev \
   timosutterer/dotfiles
@@ -196,7 +196,7 @@ docker cp ~/.vimrc dotfiles-dev:/home/$(whoami)/.vimrc
 **Copy a project from a container to your host**:
 
 ```bash
-docker cp dotfiles-dev:/home/$(whoami)/Projects/myproject ./myproject-backup
+docker cp dotfiles-dev:/home/$(whoami)/projects/myproject ./myproject-backup
 ```
 
 **Copy directory contents including hidden files from host to container**:
