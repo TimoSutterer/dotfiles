@@ -12,7 +12,3 @@ This document provides advanced use case examples and customization options.
 ## Chezmoi Usage
 
 - [Chezmoi Usage Guide](chezmoi-usage.md) - Practical examples for managing your dotfiles with chezmoi
-
-## Python Development
-
-- [Pyenv Usage Guide](pyenv-usage.md) - Managing Python versions and virtual environments with pyenv
