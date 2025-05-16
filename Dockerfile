@@ -88,6 +88,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | b
 # not set in Debian containers
 ENV PATH=$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Copy the local repository into the container
 COPY --chown=$USERNAME:$USERNAME . $HOME/.local/share/chezmoi
 # Install chezmoi in ~/.local/bin
