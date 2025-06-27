@@ -2,6 +2,22 @@
     defaultBranch = main
 [core]
     hooksPath = ~/.git-hooks
+    # Use delta as the default pager for better diff viewing
+    pager = delta
+[interactive]
+    # Use delta for interactive diff filtering with color output only
+    diffFilter = delta --color-only
+[delta]
+    # Enable navigation between diff sections with 'n' and 'N' keys
+    navigate = true
+    # Optional: Enable side-by-side diff view
+    #side-by-side = true
+    # Optional: Show line numbers in diffs
+    #line-numbers = true
+[merge]
+    # Use zdiff3 conflict style for better merge conflict resolution
+    # Shows original, left, and right versions of conflicted sections
+    conflictstyle = zdiff3
 [user]
 {{- if ne .gitUserName "" }}
     name = {{ .gitUserName }}

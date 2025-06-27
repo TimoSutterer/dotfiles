@@ -20,6 +20,16 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Install delta
+ARG DELTA_VERSION=0.18.2
+RUN apt-get update \
+ && apt-get install -y curl dpkg less ca-certificates \
+ && curl -fsSL \
+    https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb \
+    -o /tmp/delta.deb \
+ && dpkg -i /tmp/delta.deb \
+ && rm -rf /var/lib/apt/lists/* /tmp/delta.deb
+
 # Set up locales
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
