@@ -71,10 +71,13 @@ tail() {
 ###
 alias gs='git status -sb'
 alias gst='git status'
+alias gd='git diff'
+alias ga='git add'
+alias grs='git restore --staged'
 alias gc='git commit --verbose'
 alias czga='czg ai -N=3'
+alias greset='git reset --soft HEAD~1'
 alias gch='git checkout'
-alias grs='git reset --soft HEAD~1'
 alias gb='git branch'
 alias gl='git log --graph --all --decorate --oneline'
 # Like `gl`, but with timestamps
@@ -83,8 +86,6 @@ alias gll='\
     --graph --all --decorate \
     --pretty=format:"%C(auto)%h %d %s %C(black)%C(bold)%ad" \
     --date=format:"%Y-%m-%d %H:%M:%S"'
-# Remove `+` and `-` from diff lines, rely on color instead
-alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
 # gbs: git-branch-status
 # Fetch and show local unpushed/diverged and remote-only branches in color
 gbs() {
