@@ -5,6 +5,7 @@ alias l='ls -CF'
 alias ll='ls -alF'
 alias la='ls -A'
 alias ..='cd ..'
+alias cat='batcat'
 
 # Enable colorized output
 alias ls='ls --color=auto'
@@ -17,6 +18,52 @@ alias egrep='egrep --color=auto'
 # List directory contents after changing directory
 function cd {
   builtin cd "$@" && ls
+}
+
+# Highlight `---help` and `-h` output with batcat. Be aware that in some cases,
+# -h may not be a shorthand of --help (for example with ls).
+alias -g -- -h='-h 2>&1 | batcat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | batcat --language=help --style=plain'
+
+# Override `tail` so that `tail -f file` pipes through bat for nicer output
+tail() {
+  emulate -L zsh
+  # Track whether the user asked for follow mode
+  local follow=false
+  # Will hold any tail-specific flags (e.g. -n 20)
+  local opts=()
+  # Will hold file arguments
+  local files=()
+
+  # Separate flags vs. file names
+  for arg in "$@"; do
+    case $arg in
+      -f|--follow)
+        follow=true           # remember that -f was requested
+        opts+=("$arg")        # still pass it to tail
+        ;;
+      --)
+        shift                 # end of options marker
+        files+=("$@")         # the rest are files
+        break
+        ;;
+      -*) 
+        opts+=("$arg")        # other flags (e.g. -n, -v)
+        ;;
+      *)
+        files+=("$arg")       # anything else is a file
+        ;;
+    esac
+  done
+
+  # If exactly one file + follow mode -> pipe through bat
+  if $follow && (( ${#files[@]} == 1 )); then
+    command tail "${opts[@]}" "${files[1]}" \
+      | batcat --paging=never -l log
+  else
+    # Otherwise, just run the real tail unchanged
+    command tail "$@"
+  fi
 }
 
 ###

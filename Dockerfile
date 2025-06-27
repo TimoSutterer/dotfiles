@@ -9,6 +9,7 @@ RUN apt-get update && \
     zsh \
     vim \
     git \
+    bat \
     curl \
     sudo \
     tmux \
