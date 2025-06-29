@@ -79,12 +79,20 @@ ENV HOME=/home/$USERNAME
 # Set the working directory to the user's home directory
 WORKDIR $HOME
 
+# Set XDG Base Directory Specification environment variables
+ENV XDG_CONFIG_HOME=$HOME/.config \
+    XDG_DATA_HOME=$HOME/.local/share \
+    XDG_CACHE_HOME=$HOME/.cache \
+    XDG_STATE_HOME=$HOME/.local/state \
+    XDG_RUNTIME_DIR=$HOME/.local/run
+# Create directories for XDG Base Directory Specification
+RUN mkdir -p $XDG_CONFIG_HOME $XDG_DATA_HOME $XDG_CACHE_HOME $XDG_STATE_HOME $XDG_RUNTIME_DIR
+
 # Install nvm, Node.js and npm
 ARG NODE_VERSION=22.11.0
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash && \
     # Set the NVM_DIR environment variable
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && \
-    printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" && \
+    export NVM_DIR=$XDG_CONFIG_HOME/nvm && \
     # Load nvm
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
     # Install Node.js
@@ -95,15 +103,13 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | b
     nvm alias default $NODE_VERSION
 
 # Add nvm and Node.js to PATH
-# It is assumed that $NVM_DIR is $HOME/.nvm because $XDG_CONFIG_HOME is usually
-# not set in Debian containers
-ENV PATH=$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+ENV PATH=$XDG_CONFIG_HOME/nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Copy the local repository into the container
-COPY --chown=$USERNAME:$USERNAME . $HOME/.local/share/chezmoi
+COPY --chown=$USERNAME:$USERNAME . $XDG_DATA_HOME/chezmoi
 # Install chezmoi in ~/.local/bin
 RUN sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 # Install dotfiles
@@ -113,7 +119,7 @@ RUN if [ -z "$CHEZMOI_REPO" ]; then \
         $HOME/.local/bin/chezmoi init --apply; \
     else \
         # CHEZMOI_REPO is not empty, use repository from URL
-        rm -rf $HOME/.local/share/chezmoi && \
+        rm -rf $XDG_DATA_HOME/chezmoi && \
         $HOME/.local/bin/chezmoi init --apply $CHEZMOI_REPO; \
     fi
 

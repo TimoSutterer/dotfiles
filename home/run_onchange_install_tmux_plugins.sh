@@ -10,7 +10,7 @@ if ! command -v tmux > /dev/null 2>&1; then
 fi
 
 # Install Tmux Plugin Manager
-TPM_DIR="$HOME/.tmux/plugins/tpm"
+TPM_DIR="$XDG_CONFIG_HOME/tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then
   echo "Tmux Plugin Manager is not installed. Cloning..."
   git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
@@ -34,13 +34,13 @@ fi
 # Install plugins
 echo "Installing Tmux Plugin Manager plugins..."
 tmux new-session -d -s tmp_install_tpm_plugins && \
-  tmux run-shell '~/.tmux/plugins/tpm/bin/install_plugins' && \
+  tmux run-shell '$TPM_DIR/bin/install_plugins' && \
   tmux kill-session -t tmp_install_tpm_plugins
 echo "Tmux Plugin Manager plugins installed."
 ## Update plugins
 #echo "Updating Tmux Plugin Manager plugins..."
 #tmux new-session -d -s tmp_update_tpm_plugins && \
-#  tmux run-shell '~/.tmux/plugins/tpm/bin/update_plugins all' && \
+#  tmux run-shell '$TPM_DIR/bin/update_plugins all' && \
 #  tmux kill-session -t tmp_update_tpm_plugins
 #echo "Tmux Plugin Manager plugins updated."
 echo "Note: You may need to restart tmux or reload its configuration with" \
