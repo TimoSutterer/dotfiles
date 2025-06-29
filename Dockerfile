@@ -20,6 +20,12 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Set up locales
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
 # Install delta
 ARG DELTA_VERSION=0.18.2
 RUN apt-get update \
@@ -29,12 +35,6 @@ RUN apt-get update \
     -o /tmp/delta.deb \
  && dpkg -i /tmp/delta.deb \
  && rm -rf /var/lib/apt/lists/* /tmp/delta.deb
-
-# Set up locales
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV LC_ALL=en_US.UTF-8
 
 # Create a non-root user
 ARG USERNAME=guest
