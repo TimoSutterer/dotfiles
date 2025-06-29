@@ -14,7 +14,6 @@ RUN apt-get update && \
     sudo \
     tmux \
     gnupg \
-    neovim \
     locales && \
     # Clean up apt cache to reduce image size
     apt-get clean && \
@@ -25,6 +24,17 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
+
+# Install Neovim
+# Neovim is installed from the pre-build archive because the version in the
+# Debian repository is outdated
+ARG NVIM_VERSION=v0.11.2
+RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
+    rm -rf /opt/nvim && \
+    tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
+    rm nvim-linux-x86_64.tar.gz
+# Add Neovim to PATH
+ENV PATH=$PATH:/opt/nvim-linux-x86_64/bin
 
 # Install delta
 ARG DELTA_VERSION=0.18.2

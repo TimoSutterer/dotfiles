@@ -28,6 +28,7 @@ docker build \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
   --build-arg NODE_VERSION=22.11.0 \
+  --build-arg NVIM_VERSION=v0.11.2 \
   --build-arg DELTA_VERSION=0.18.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .
@@ -37,6 +38,7 @@ docker build \
 - **USER_UID** - User ID
 - **USER_GID** - Group ID
 - **NODE_VERSION** - Node.js version to install
+- **NVIM_VERSION** - Neovim version to install
 - **DELTA_VERSION** - Delta version to install
 - **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)
 
