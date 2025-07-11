@@ -2,6 +2,9 @@
 # This script automatically installs and initializes zinit, a fast and flexible
 # Zsh plugin manager that allows for easy installation and management of Zsh
 # plugins, themes, and other enhancements.
+# 
+# IMPORTANT: This file must be sourced before any other files that use zinit
+# commands (like p10k.zsh), as zinit needs to be initialized first.
 
 # Set the zinit installation directory
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
