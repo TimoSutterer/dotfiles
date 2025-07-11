@@ -27,7 +27,7 @@ docker build \
   --build-arg USERNAME=$(whoami) \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
-  --build-arg NODE_VERSION=22.11.0 \
+  --build-arg NODE_VERSION=22.17.0 \
   --build-arg NVIM_VERSION=v0.11.2 \
   --build-arg DELTA_VERSION=0.18.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
