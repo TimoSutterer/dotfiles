@@ -133,5 +133,19 @@ RUN if [ -z "$CHEZMOI_REPO" ]; then \
         $HOME/.local/bin/chezmoi init --apply $CHEZMOI_REPO; \
     fi
 
+# Pre-initialize shell environment to speed up first container start
+# This sources the zsh configuration which triggers zinit plugin installation
+# and configuration setup, avoiding the delay when starting the container
+RUN zsh -c "source ~/.zshrc"
+
+# Pre-compile gitstatus binary for Powerlevel10k theme
+# Without this, the binary would be compiled on first zsh start, causing delay
+RUN zsh -c "$XDG_DATA_HOME/zinit/plugins/romkatv---powerlevel10k/gitstatus/install"
+
+# Pre-install and sync all Neovim plugins using lazy.nvim
+# This downloads and installs all plugins defined in the Neovim configuration
+# Without this, plugins would be installed on first Neovim launch, causing delay
+RUN nvim --headless "+Lazy! sync" +qa
+
 # Set the default command to start or attach to a tmux session named 'default'
 CMD ["tmux", "new-session", "-A", "-s", "default"]
