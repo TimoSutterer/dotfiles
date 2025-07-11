@@ -1,3 +1,7 @@
+# Node Version Manager (NVM) setup and integration
+# This script sets up NVM for managing multiple Node.js versions and provides
+# automatic version switching based on .nvmrc files in project directories.
+
 # Set the NVM_DIR environment variable
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && \
 printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"

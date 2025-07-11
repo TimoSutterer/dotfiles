@@ -1,3 +1,8 @@
+# Zsh aliases and custom functions
+# This file contains various shell aliases for common commands, enhanced git workflows,
+# vim shortcuts, and Docker utilities. It also includes custom functions for better
+# command output formatting and enhanced shell navigation.
+
 ###
 # Shell
 ###
