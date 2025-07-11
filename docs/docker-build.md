@@ -27,6 +27,7 @@ docker build \
   --build-arg USERNAME=$(whoami) \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
+  --build-arg NVM_VERSION=0.40.3 \
   --build-arg NODE_VERSION=22.17.0 \
   --build-arg NVIM_VERSION=v0.11.2 \
   --build-arg DELTA_VERSION=0.18.2 \
@@ -37,6 +38,7 @@ docker build \
 - **USERNAME** - Container username
 - **USER_UID** - User ID
 - **USER_GID** - Group ID
+- **NVM_VERSION** - NVM (Node Version Manager) version to install
 - **NODE_VERSION** - Node.js version to install
 - **NVIM_VERSION** - Neovim version to install
 - **DELTA_VERSION** - Delta version to install
