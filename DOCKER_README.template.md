@@ -37,3 +37,7 @@ chezmoi init -a
 ```
 
 For detailed configuration instructions and available customization options, please visit the [GitHub repository](https://github.com/TimoSutterer/dotfiles).
+
+# Troubleshooting
+
+If colors or symbols don't render correctly, see the [Powerlevel10k troubleshooting guide](https://github.com/TimoSutterer/dotfiles/blob/main/docs/p10k-troubleshooting.md) for font installation and display configuration help.

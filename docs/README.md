@@ -12,3 +12,8 @@ This document provides advanced use case examples and customization options.
 ## Chezmoi Usage
 
 - [Chezmoi Usage Guide](chezmoi-usage.md) - Practical examples for managing your dotfiles with chezmoi
+
+## Powerlevel10k Configuration
+
+- [Powerlevel10k Setup](p10k-setup.md) - Font installation and display configuration for the Powerlevel10k theme
+- [Powerlevel10k Troubleshooting](p10k-troubleshooting.md) - Solutions for common Powerlevel10k display and functionality issues
