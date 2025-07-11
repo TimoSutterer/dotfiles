@@ -2,7 +2,7 @@
 # This script installs the Powerlevel10k theme, a fast and highly customizable
 # Zsh prompt theme.
 #
-# NOTE: This file depends on zinit being initialized first (see 10-zinit.zsh)
+# NOTE: This file depends on zinit being initialized first (see zinit.zsh)
 #       Configuration is handled separately in p10k-config.zsh
 
 # Install p10k theme using zinit with shallow clone for faster installation
