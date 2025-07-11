@@ -15,5 +15,10 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # Clone zinit repository if it's not already installed
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 
+# Handle corrupted/incomplete zinit installation (common in Docker environments)
+if [ ! -f "${ZINIT_HOME}/zinit.zsh" ] && [ -d "${ZINIT_HOME}/.git" ]; then
+    cd "$ZINIT_HOME" && git pull
+fi
+
 # Source the zinit script to initialize the plugin manager
 source "${ZINIT_HOME}/zinit.zsh"
