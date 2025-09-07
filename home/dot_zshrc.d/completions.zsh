@@ -10,3 +10,7 @@
 
 # Install the zsh-completions plugin using zinit
 zinit light zsh-users/zsh-completions
+
+# Initialize the completions
+zicompinit
+zicdreplay
