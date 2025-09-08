@@ -191,12 +191,34 @@ dp() {
     }
     {
       # Store each column in its own array for later printing
-      name[NR]=$1; id[NR]=$2; ports[NR]=$3; image[NR]=$4; state[NR]=$5
+      # Truncate name to 25 chars
+      if (length($1) > 25) {
+        # Keep first 22 chars and add "..."
+        name[NR] = substr($1, 1, 22) "..."
+      } else {
+        name[NR] = $1
+      }
+      id[NR]=$2;
+      # Truncate ports to 20 chars
+      if (length($3) > 20) {
+        # Keep first 17 chars and add "..."
+        ports[NR] = substr($3, 1, 17) "..."
+      } else {
+        ports[NR] = $3
+      }
+      # Truncate image name to 40 chars
+      if (length($4) > 40) {
+        # Keep first 37 chars and add "..."
+        image[NR] = substr($4, 1, 37) "..."
+      } else {
+        image[NR] = $4
+      }
+      state[NR]=$5
       # Update max width per column if current field is wider
-      if (length($1) > w1) w1 = length($1)
+      if (length(name[NR]) > w1) w1 = length(name[NR])
       if (length($2) > w2) w2 = length($2)
-      if (length($3) > w3) w3 = length($3)
-      if (length($4) > w4) w4 = length($4)
+      if (length(ports[NR]) > w3) w3 = length(ports[NR])
+      if (length(image[NR]) > w4) w4 = length(image[NR])
     }
     END {
       # Build a dynamic printf format string with two spaces between columns
