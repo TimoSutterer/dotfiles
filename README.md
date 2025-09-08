@@ -11,7 +11,7 @@ chezmoi init -a TimoSutterer
 On a new machine:
 
 ```
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply TimoSutterer
+sh -c "cd $HOME && $(curl -fsLS get.chezmoi.io)" -- init --apply TimoSutterer
 ```
 
 [Containerized](https://hub.docker.com/r/timosutterer/dotfiles):
