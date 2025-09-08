@@ -200,6 +200,8 @@ For a new system where you need your full configuration:
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply TimoSutterer
 ```
 
+> **Note:** The default `get.chezmoi.io` script downloads the chezmoi binary to `./bin` in your current directory. You may want to run this from your home directory or another appropriate location where the binary can be located, not a project directory.
+
 ### Testing in a Container First
 
 Before applying to a new system, test in a container:
