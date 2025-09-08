@@ -40,4 +40,10 @@ For detailed configuration instructions and available customization options, ple
 
 # Troubleshooting
 
-If colors or symbols don't render correctly, see the [Powerlevel10k troubleshooting guide](https://github.com/TimoSutterer/dotfiles/blob/main/docs/p10k-troubleshooting.md) for font installation and display configuration help.
+## Display Issues
+
+If colors or symbols don't render correctly in your terminal, see the [Powerlevel10k troubleshooting guide](https://github.com/TimoSutterer/dotfiles/blob/main/docs/p10k-troubleshooting.md) for font installation and display configuration help.
+
+## Keyboard Shortcut Issues
+
+If you're experiencing issues with keyboard shortcuts (e.g Ctrl+P) in Docker containers, see the [Docker troubleshooting guide](https://github.com/TimoSutterer/dotfiles/blob/main/docs/docker-troubleshooting.md) for solutions.
