@@ -22,7 +22,7 @@ alias egrep='egrep --color=auto'
 
 # List directory contents after changing directory
 function cd {
-  builtin cd "$@" && ls
+  builtin cd "$@" && l
 }
 
 # Highlight `---help` and `-h` output with batcat. Be aware that in some cases,
