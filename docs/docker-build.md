@@ -29,6 +29,7 @@ docker build \
   --build-arg USER_GID=$(id -g) \
   --build-arg NVM_VERSION=0.40.3 \
   --build-arg NODE_VERSION=22.17.0 \
+  --build-arg UV_VERSION=0.9.9 \
   --build-arg NVIM_VERSION=v0.11.2 \
   --build-arg DELTA_VERSION=0.18.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
@@ -40,6 +41,7 @@ docker build \
 - **USER_GID** - Group ID
 - **NVM_VERSION** - NVM (Node Version Manager) version to install
 - **NODE_VERSION** - Node.js version to install
+- **UV_VERSION** - uv version to install
 - **NVIM_VERSION** - Neovim version to install
 - **DELTA_VERSION** - Delta version to install
 - **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)

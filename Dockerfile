@@ -1,3 +1,9 @@
+# This stage exists so we can parameterize the uv image version via ARG.
+# Docker does not allow COPY --from=<image:tag> to use variables, so we
+# load the versioned image here and give the stage a fixed name.
+ARG UV_VERSION=0.9.9
+FROM docker.io/astral/uv:${UV_VERSION} AS uv
+
 FROM debian:bookworm
 
 # Suppress prompts
@@ -116,8 +122,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.
 # Add nvm and Node.js to PATH
 ENV PATH=$XDG_CONFIG_HOME/nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
-# Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Install uv by copying binaries from the uv image/stage
+COPY --from=uv /uv /uvx /bin/
 
 # Copy the local repository into the container
 COPY --chown=$USERNAME:$USERNAME . $XDG_DATA_HOME/chezmoi
