@@ -30,7 +30,7 @@ docker build \
   --build-arg NVM_VERSION=0.40.3 \
   --build-arg NODE_VERSION=22.17.0 \
   --build-arg UV_VERSION=0.9.9 \
-  --build-arg NVIM_VERSION=v0.11.2 \
+  --build-arg NVIM_VERSION=v0.11.5 \
   --build-arg DELTA_VERSION=0.18.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .

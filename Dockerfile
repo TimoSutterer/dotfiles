@@ -34,7 +34,7 @@ ENV LC_ALL=en_US.UTF-8
 # Install Neovim
 # Neovim is installed from the pre-build archive because the version in the
 # Debian repository is outdated
-ARG NVIM_VERSION=v0.11.2
+ARG NVIM_VERSION=v0.11.5
 RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
     rm -rf /opt/nvim && \
     tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
