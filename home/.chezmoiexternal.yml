@@ -1,0 +1,6 @@
+".config/tmux/plugins/catppuccin/tmux":
+  type: archive
+  # See https://github.com/catppuccin/tmux/tags for available versions
+  url: "https://github.com/catppuccin/tmux/archive/v2.1.3.tar.gz"
+  exact: true
+  stripComponents: 1
