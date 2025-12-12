@@ -4,7 +4,7 @@
 ARG UV_VERSION=0.9.9
 FROM docker.io/astral/uv:${UV_VERSION} AS uv
 
-FROM debian:bookworm
+FROM debian:trixie
 
 # Suppress prompts
 ENV DEBIAN_FRONTEND=noninteractive
