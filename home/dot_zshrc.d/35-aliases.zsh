@@ -174,14 +174,14 @@ alias v='nvim'
 ###
 # Docker
 ###
-alias d='sudo docker'
-alias dc='sudo docker compose'
+alias d='docker'
+alias dc='docker compose'
 
 # List all Docker containers (running ones in green)
 # Show Name, ID, Ports & Image in aligned columns
 dp() {
   # Fetch all containers with Name, ID, Ports, Image and State (for coloring)
-  sudo docker ps -a \
+  docker ps -a \
     --format \ "{{.Names}}\t{{.ID}}\t{{.Ports}}\t{{.Image}}\t{{.State}}" | \
   awk -F $'\t' '
     NR==1 {
