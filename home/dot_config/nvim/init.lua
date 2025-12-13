@@ -1,5 +1,6 @@
 require("config.leaders")
 require("config.options")
+require("config.gitcommit")
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
