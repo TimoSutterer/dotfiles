@@ -87,6 +87,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy entrypoint script
+COPY --chmod=755 entrypoint.sh /usr/local/bin/entrypoint.sh
+
 # Switch to the non-root user
 USER $USERNAME
 
@@ -153,6 +156,9 @@ RUN zsh -c "$XDG_DATA_HOME/zinit/plugins/romkatv---powerlevel10k/gitstatus/insta
 # This downloads and installs all plugins defined in the Neovim configuration
 # Without this, plugins would be installed on first Neovim launch, causing delay
 RUN nvim --headless "+Lazy! sync" +qa
+
+# Set the entrypoint
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Set the default command to start or attach to a tmux session named 'default'
 CMD ["tmux", "new-session", "-A", "-s", "default"]
