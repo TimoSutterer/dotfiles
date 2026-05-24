@@ -1,0 +1,75 @@
+git:
+  # Disable force-pushing from LazyGit to avoid overwriting remote history by
+  # accident.
+  disableForcePushing: true
+gui:
+  # Keep the discard warning enabled so LazyGit still warns before throwing
+  # away file changes.
+  skipDiscardChangeWarning: false
+  # Keep the amend warning enabled so LazyGit still warns before rewriting the
+  # last commit.
+  skipAmendWarning: false
+  # Keep the stash warning enabled so LazyGit still warns before
+  # applying/popping stashes.
+  skipStashWarning: false
+  # Keep the commit-without-staged-files warning enabled to avoid LazyGit
+  # staging every unstaged file for you.
+  skipNoStagedFilesWarning: false
+keybinding:
+  universal:
+    # Disable plain push from LazyGit so pushing is always done explicitly
+    # outside LazyGit.
+    pushFiles: "<disabled>"
+    # Disable pull from LazyGit so network-changing branch updates are done
+    # explicitly outside LazyGit.
+    pullFiles: "<disabled>"
+    # Disable broad "delete/drop/remove" action used in several panels to avoid
+    # accidentally deleting branches, tags, stashes, remotes, or dropping
+    # commits.
+    remove: "<disabled>"
+  files:
+    # Disable discarding file changes to avoid permanently losing uncommitted
+    # work.
+    confirmDiscard: "<disabled>"
+    # Disable the working-tree reset menu to avoid accidentally nuking local
+    # changes.
+    viewResetOptions: "<disabled>"
+  branches:
+    # Disable force-checkout to avoid switching branches by throwing away
+    # local working-tree changes.
+    forceCheckoutBranch: "<disabled>"
+  commits:
+    # Disable reset-to-commit options to avoid moving the current branch and
+    # making local commits appear lost.
+    viewResetOptions: "<disabled>"
+    # Disable squashing commits to avoid rewriting local commit history by
+    # accident.
+    squashDown: "<disabled>"
+    # Disable rewording commits inline to avoid rewriting commit history by
+    # accident.
+    renameCommit: "<disabled>"
+    # Disable rewording commits in the editor to avoid rewriting commit history
+    # by accident.
+    renameCommitWithEditor: "<disabled>"
+    # Disable applying fixup/squash commits above a commit to avoid rewriting
+    # multiple commits at once.
+    squashAboveCommits: "<disabled>"
+    # Disable amending staged changes into an older commit to avoid rewriting
+    # commit history via rebase.
+    amendToCommit: "<disabled>"
+    # Disable interactive rebase from LazyGit to avoid accidental history
+    # rewrites.
+    startInteractiveRebase: "<disabled>"
+  commitFiles:
+    # Disable checking out a file from an old commit to avoid overwriting the
+    # working-tree version of that file.
+    checkoutCommitFile: "<disabled>"
+# Disable the Files-panel `g` upstream-reset shortcut by replacing it with a
+# no-op. This is not a prompt; it exists because the upstream-reset shortcut is
+# not exposed as a normal keybinding option.
+customCommands:
+  - key: "g"
+    context: "files"
+    description: "Disabled: reset to upstream"
+    command: 'printf "%s\n" "Reset to upstream is disabled."'
+    output: popup
