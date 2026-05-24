@@ -43,7 +43,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/
 ENV PATH=$PATH:/opt/nvim-linux-x86_64/bin
 
 # Install delta
-ARG DELTA_VERSION=0.18.2
+ARG DELTA_VERSION=0.19.2
 RUN apt-get update \
  && apt-get install -y curl dpkg less ca-certificates \
  && curl -fsSL \
