@@ -214,47 +214,59 @@ dbuild() {
 
 # List all Docker containers (running ones in green)
 # Show Name, ID, Ports & Image in aligned columns
+# Usage:
+#   dp [name_width|-] [id_width|-] [ports_width|-] [image_width|-]
 dp() {
+  local name_max="${1:-25}"
+  local id_max="${2:-12}"
+  local ports_max="${3:-20}"
+  local image_max="${4:-40}"
+
+  # Allow "-" to mean "use default"
+  [[ "$name_max"  == "-" ]] && name_max=25
+  [[ "$id_max" == "-" ]] && id_max=12
+  [[ "$ports_max" == "-" ]] && ports_max=20
+  [[ "$image_max" == "-" ]] && image_max=40
+
+  # Basic validation
+  [[ "$name_max"  =~ ^[0-9]+$ ]] || name_max=25
+  [[ "$id_max" =~ ^[0-9]+$ ]] || id_max=12
+  [[ "$ports_max" =~ ^[0-9]+$ ]] || ports_max=20
+  [[ "$image_max" =~ ^[0-9]+$ ]] || image_max=40
+
   # Fetch all containers with Name, ID, Ports, Image and State (for coloring)
   docker ps -a \
-    --format \ "{{.Names}}\t{{.ID}}\t{{.Ports}}\t{{.Image}}\t{{.State}}" | \
-  awk -F $'\t' '
-    NR==1 {
-      # Initialize header labels and set their minimum widths
+    --format "{{.Names}}\t{{.ID}}\t{{.Ports}}\t{{.Image}}\t{{.State}}" |
+  awk -F '\t' \
+    -v name_max="$name_max" \
+    -v id_max="$id_max" \
+    -v ports_max="$ports_max" \
+    -v image_max="$image_max" '
+    function trunc(s, max) {
+      if (max <= 0) return ""
+      if (length(s) <= max) return s
+      if (max <= 3) return substr(s, 1, max)
+      return substr(s, 1, max - 3) "..."
+    }
+
+    BEGIN {
       h1="NAME"; h2="ID"; h3="PORTS"; h4="IMAGE"
       w1=length(h1); w2=length(h2); w3=length(h3); w4=length(h4)
     }
+
     {
-      # Store each column in its own array for later printing
-      # Truncate name to 25 chars
-      if (length($1) > 25) {
-        # Keep first 22 chars and add "..."
-        name[NR] = substr($1, 1, 22) "..."
-      } else {
-        name[NR] = $1
-      }
-      id[NR]=$2;
-      # Truncate ports to 20 chars
-      if (length($3) > 20) {
-        # Keep first 17 chars and add "..."
-        ports[NR] = substr($3, 1, 17) "..."
-      } else {
-        ports[NR] = $3
-      }
-      # Truncate image name to 40 chars
-      if (length($4) > 40) {
-        # Keep first 37 chars and add "..."
-        image[NR] = substr($4, 1, 37) "..."
-      } else {
-        image[NR] = $4
-      }
-      state[NR]=$5
-      # Update max width per column if current field is wider
-      if (length(name[NR]) > w1) w1 = length(name[NR])
-      if (length($2) > w2) w2 = length($2)
+      name[NR]  = trunc($1, name_max)
+      id[NR]    = trunc($2, id_max)
+      ports[NR] = trunc($3, ports_max)
+      image[NR] = trunc($4, image_max)
+      state[NR] = $5
+
+      if (length(name[NR])  > w1) w1 = length(name[NR])
+      if (length(id[NR])    > w2) w2 = length(id[NR])
       if (length(ports[NR]) > w3) w3 = length(ports[NR])
       if (length(image[NR]) > w4) w4 = length(image[NR])
     }
+
     END {
       # Build a dynamic printf format string with two spaces between columns
       fmt = "%-" w1 "s  %-" w2 "s  %-" w3 "s  %-" w4 "s\n"
