@@ -108,7 +108,7 @@ ENV XDG_CONFIG_HOME=$HOME/.config \
 RUN mkdir -p $XDG_CONFIG_HOME $XDG_DATA_HOME $XDG_CACHE_HOME $XDG_STATE_HOME $XDG_RUNTIME_DIR
 
 # Install nvm, Node.js and npm
-ARG NVM_VERSION=0.40.3
+ARG NVM_VERSION=0.40.4
 ARG NODE_VERSION=24.11.1
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash && \
     # Set the NVM_DIR environment variable
