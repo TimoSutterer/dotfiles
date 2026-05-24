@@ -1,7 +1,7 @@
 # This stage exists so we can parameterize the uv image version via ARG.
 # Docker does not allow COPY --from=<image:tag> to use variables, so we
 # load the versioned image here and give the stage a fixed name.
-ARG UV_VERSION=0.9.9
+ARG UV_VERSION=0.11.16
 FROM docker.io/astral/uv:${UV_VERSION} AS uv
 
 FROM debian:trixie

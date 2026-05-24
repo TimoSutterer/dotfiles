@@ -29,7 +29,7 @@ docker build \
   --build-arg USER_GID=$(id -g) \
   --build-arg NVM_VERSION=0.40.4 \
   --build-arg NODE_VERSION=24.16.0 \
-  --build-arg UV_VERSION=0.9.9 \
+  --build-arg UV_VERSION=0.11.16 \
   --build-arg NVIM_VERSION=v0.11.5 \
   --build-arg DELTA_VERSION=0.18.2 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
