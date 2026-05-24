@@ -179,6 +179,39 @@ alias v='nvim'
 alias d='docker'
 alias dc='docker compose'
 
+# Build a Docker image with the provided -t/--tag
+# Also tag it with a timestamped version derived from the same repository
+dbuild() {
+  local ts tag repo
+  ts="$(date +%Y%m%d-%H%M%S)"
+
+  # Find the last -t / --tag value in the docker build args.
+  for ((i = 1; i <= $#; i++)); do
+    case "${argv[i]}" in
+      -t|--tag)
+        (( i++ ))
+        tag="${argv[i]}"
+        ;;
+      --tag=*)
+        tag="${argv[i]#--tag=}"
+        ;;
+    esac
+  done
+
+  if [[ -z "$tag" ]]; then
+    echo "error: dbuild requires a -t/--tag so it can derive the versioned tag" >&2
+    return 1
+  fi
+
+  # Strip the tag part, but keep registry ports like localhost:5000/image.
+  repo="${tag%:*}"
+  if [[ "$repo" == "$tag" || "$tag" == *"/"* && "${tag##*/}" != *":"* ]]; then
+    repo="$tag"
+  fi
+
+  command docker build "$@" -t "${repo}:${ts}"
+}
+
 # List all Docker containers (running ones in green)
 # Show Name, ID, Ports & Image in aligned columns
 dp() {
