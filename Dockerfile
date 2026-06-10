@@ -47,8 +47,13 @@ ENV PATH=$PATH:/opt/nvim-linux-x86_64/bin
 ARG DELTA_VERSION=0.19.2
 RUN apt-get update \
  && apt-get install -y curl dpkg less ca-certificates \
+ && case "$(dpkg --print-architecture)" in \
+      amd64) delta_arch=amd64 ;; \
+      arm64) delta_arch=arm64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
  && curl -fsSL \
-    https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb \
+    https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_${delta_arch}.deb \
     -o /tmp/delta.deb \
  && dpkg -i /tmp/delta.deb \
  && rm -rf /var/lib/apt/lists/* /tmp/delta.deb
