@@ -32,6 +32,8 @@ docker build \
   --build-arg UV_VERSION=0.11.16 \
   --build-arg NVIM_VERSION=v0.12.2 \
   --build-arg DELTA_VERSION=0.19.2 \
+  --build-arg LEFTHOOK_VERSION=2.1.9 \
+  --build-arg LHM_VERSION=v0.11.1 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .
 ```
@@ -44,6 +46,8 @@ docker build \
 - **UV_VERSION** - uv version to install
 - **NVIM_VERSION** - Neovim version to install
 - **DELTA_VERSION** - Delta version to install
+- **LEFTHOOK_VERSION** - Lefthook version to install
+- **LHM_VERSION** - lhm version to install
 - **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)
 
 > **Important:** Setting the USERNAME, USER_UID, and USER_GID is particularly important when mounting directories from your host system. Learn more about [Docker Mounts and Permissions](docker-mounts.md).

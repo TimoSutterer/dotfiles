@@ -2,7 +2,6 @@
     defaultBranch = main
 [core]
     editor = nvim
-    hooksPath = ~/.git-hooks
     # Use delta as the default pager for better diff viewing
     pager = delta
 [interactive]
@@ -26,4 +25,3 @@
 {{- if ne .gitUserEmail "" }}
     email = {{ .gitUserEmail }}
 {{- end }}
-

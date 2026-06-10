@@ -1,0 +1,10 @@
+skip_lfs: true
+output:
+  - success
+  - failure
+
+commit-msg:
+  jobs:
+    - name: verify commit message format (commitlint)
+      interactive: true
+      run: $HOME/.config/lefthook/commit-msg/commitlint.sh {1}

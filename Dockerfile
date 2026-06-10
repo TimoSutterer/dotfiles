@@ -53,6 +53,31 @@ RUN apt-get update \
  && dpkg -i /tmp/delta.deb \
  && rm -rf /var/lib/apt/lists/* /tmp/delta.deb
 
+# Install lefthook
+ARG LEFTHOOK_VERSION=2.1.9
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) lefthook_arch=amd64 ;; \
+      arm64) lefthook_arch=arm64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
+ && curl -fsSL \
+    https://github.com/evilmartians/lefthook/releases/download/v${LEFTHOOK_VERSION}/lefthook_${LEFTHOOK_VERSION}_${lefthook_arch}.deb \
+    -o /tmp/lefthook.deb \
+ && dpkg -i /tmp/lefthook.deb \
+ && rm -f /tmp/lefthook.deb
+
+# Install lhm
+ARG LHM_VERSION=v0.11.1
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) lhm_arch=x86_64 ;; \
+      arm64) lhm_arch=aarch64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
+ && curl -fsSL \
+    https://github.com/block/lhm/releases/download/${LHM_VERSION}/lhm-${lhm_arch}-unknown-linux-gnu.bz2 \
+    | bunzip2 > /usr/local/bin/lhm \
+ && chmod 755 /usr/local/bin/lhm
+
 # Create a non-root user
 ARG USERNAME=guest
 ARG USER_UID=1000

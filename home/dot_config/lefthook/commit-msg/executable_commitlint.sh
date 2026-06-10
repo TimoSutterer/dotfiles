@@ -6,8 +6,19 @@ if [ "$SKIP_COMMITLINT" = "1" ]; then
     exit 0
 fi
 
-# Run Commitlint
-npx commitlint --edit "$1" || {
+# Run Commitlint and show its output before prompting for an override
+commitlint_output="$(mktemp)"
+trap 'rm -f "$commitlint_output"' EXIT
+
+if npx commitlint --edit "$1" > "$commitlint_output" 2>&1; then
+    exit 0
+fi
+
+if [ -s "$commitlint_output" ]; then
+    cat "$commitlint_output" >&2
+fi
+
+{
     echo "Commit message does not comply with the standards."
 
     # Assigns stdin to keyboard to be able to read user input
@@ -44,4 +55,3 @@ npx commitlint --edit "$1" || {
         esac
     done
 }
-
