@@ -1,0 +1,7 @@
+# Baseline Git behavior that is not tied to a specific helper tool
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = nvim

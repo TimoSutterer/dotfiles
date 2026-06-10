@@ -1,0 +1,9 @@
+# User identity and signing defaults
+
+[user]
+{{- if ne .gitUserName "" }}
+    name = {{ .gitUserName }}
+{{- end -}}
+{{- if ne .gitUserEmail "" }}
+    email = {{ .gitUserEmail }}
+{{- end }}

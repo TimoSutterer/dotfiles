@@ -1,0 +1,8 @@
+# Keep user-managed git settings in config.d fragments, separate from
+# tool-managed global settings that installers like lhm may add to this
+# top-level config.
+[include]
+    path = ~/.config/git/config.d/basics.gitconfig
+    path = ~/.config/git/config.d/diff.gitconfig
+    path = ~/.config/git/config.d/merge.gitconfig
+    path = ~/.config/git/config.d/user.gitconfig

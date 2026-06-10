@@ -1,0 +1,6 @@
+# Merge and conflict-resolution defaults
+
+[merge]
+    # Use zdiff3 conflict style for better merge conflict resolution
+    # Shows original, left, and right versions of conflicted sections
+    conflictstyle = zdiff3
