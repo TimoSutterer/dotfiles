@@ -26,3 +26,16 @@
 [data]
     gitUserName = {{ $gitUserName | quote }}
     gitUserEmail = {{ $gitUserEmail | quote }}
+
+# Hide chezmoi script contents from normal diff output.
+# Scripts such as run_, run_once_, and run_onchange_ are not copied as files;
+# they are executed by `chezmoi apply`. Without this, `chezmoi diff` can show
+# noisy script entries, sometimes with the `run_` prefix stripped.
+#
+# This only affects visibility in diff; it does not prevent scripts from
+# running during `chezmoi apply`, and `chezmoi status` will still show scripts
+# that are due to run.
+#
+# Docs: https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/
+[diff]
+    exclude = ["scripts"]
