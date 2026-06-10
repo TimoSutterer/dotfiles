@@ -20,6 +20,7 @@ RUN apt-get update && \
     sudo \
     tmux \
     gnupg \
+    bzip2 \
     locales \
     lazygit && \
     # Clean up apt cache to reduce image size
