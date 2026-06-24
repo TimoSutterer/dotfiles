@@ -212,6 +212,45 @@ dbuild() {
   command docker build "$@" -t "${repo}:${ts}"
 }
 
+# Find the newest timestamp-versioned local image tag for a repository.
+# Prints the full image reference so it can be used by other commands.
+dlast() {
+  local repo version
+
+  # Usage:
+  #   dlast <image-repo>
+  #
+  # Example:
+  #   dlast myimage
+  #
+  # This only considers timestamp-shaped tags, e.g.
+  #   20260617-143015
+  #
+  # Example output:
+  #   myimage:20260617-143015
+
+  repo="$1"
+
+  if [[ -z "$repo" ]]; then
+    echo "usage: dlast <image-repo>" >&2
+    return 1
+  fi
+
+  version="$(
+    command docker image ls "$repo" --format '{{.Tag}}' |
+      grep -E '^[0-9]{8}-[0-9]{6}$' |
+      sort |
+      tail -n 1
+  )"
+
+  if [[ -z "$version" ]]; then
+    echo "error: no timestamp-versioned tags found for $repo" >&2
+    return 1
+  fi
+
+  echo "${repo}:${version}"
+}
+
 # List all Docker containers (running ones in green)
 # Show Name, ID, Ports & Image in aligned columns
 # Usage:
