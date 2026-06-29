@@ -21,8 +21,7 @@ RUN apt-get update && \
     tmux \
     gnupg \
     bzip2 \
-    locales \
-    lazygit && \
+    locales && \
     # Clean up apt cache to reduce image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
