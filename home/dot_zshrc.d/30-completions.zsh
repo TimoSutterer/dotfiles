@@ -16,7 +16,8 @@ ZSH_COMPLETION_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions"
 [[ ! -d "$ZSH_COMPLETION_DIR" ]] && mkdir -p "$ZSH_COMPLETION_DIR"
 # Add the custom completion directory to the function path. This allows Zsh to
 # find and load completion functions stored there.
-fpath=("$ZSH_COMPLETION_DIR" $fpath)
+typeset -U fpath
+fpath=("$ZSH_COMPLETION_DIR" "${fpath[@]}")
 
 # Initialize the completions
 zicompinit
