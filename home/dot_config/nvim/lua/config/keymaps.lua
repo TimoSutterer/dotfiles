@@ -9,3 +9,7 @@ vim.keymap.set("n", ";", "<cmd>bnext<cr>", { silent = true, desc = "Next buffer"
 
 -- Alternate (last-used) buffer, i.e. the native <C-^>.
 vim.keymap.set("n", "<BS>", "<C-^>", { silent = true, desc = "Alternate buffer" })
+
+-- The buffer namespace complements the direct navigation keys above (see also
+-- the fzf-lua buffers section in plugins/fzf.lua).
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { silent = true, desc = "Delete buffer" })

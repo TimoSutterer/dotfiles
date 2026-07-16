@@ -16,6 +16,7 @@ RUN apt-get update && \
     vim \
     git \
     bat \
+    fzf \
     curl \
     sudo \
     tmux \
