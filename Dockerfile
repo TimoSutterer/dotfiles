@@ -126,6 +126,8 @@ USER $USERNAME
 
 # Set the HOME environment variable
 ENV HOME=/home/$USERNAME
+# Add ~/.local/bin to PATH for user-installed binaries
+ENV PATH=$HOME/.local/bin:$PATH
 # Set the working directory to the user's home directory
 WORKDIR $HOME
 
