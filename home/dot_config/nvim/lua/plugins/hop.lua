@@ -19,6 +19,10 @@ return {
     },
   },
   config = function()
-    require('hop').setup()
+    require('hop').setup({
+      -- Order the hint labels along the home row (and nearby keys) so the most
+      -- common jumps use the strongest fingers and require the least movement.
+      keys = 'etovxqpdygfblzhckisuran',
+    })
   end,
 }
