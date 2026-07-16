@@ -8,4 +8,6 @@
 #
 # By adding this to PATH, we ensure that user-installed binaries are
 # accessible from anywhere in the shell without specifying full paths.
-export PATH="$HOME/.local/bin:$PATH"
+typeset -U path
+path=("$HOME/.local/bin" "${path[@]}")
+export PATH
