@@ -1,6 +1,8 @@
 return {
   'smoka7/hop.nvim',
-  version = '*', 
+  -- Track the latest commit on the default branch, since this fork does not
+  -- publish reliable semver tags.
+  version = false,
   keys = {
     -- 's' as a 2-char hop motion in normal, visual, and operator-pending modes.
     -- 's' in operator-pending mode enables motions like 'ys' (yank to hop
