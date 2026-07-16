@@ -41,7 +41,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/
     tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
     rm nvim-linux-x86_64.tar.gz
 # Add Neovim to PATH
-ENV PATH=$PATH:/opt/nvim-linux-x86_64/bin
+ENV PATH=/opt/nvim-linux-x86_64/bin:$PATH
 
 # Install delta
 ARG DELTA_VERSION=0.19.2
