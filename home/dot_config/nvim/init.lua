@@ -1,5 +1,6 @@
 require("config.leaders")
 require("config.options")
+require("config.keymaps")
 require("config.gitcommit")
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
