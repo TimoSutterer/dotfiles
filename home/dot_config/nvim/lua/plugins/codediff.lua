@@ -7,7 +7,8 @@ return {
   version = '2.49.2',
   keys = {
     { '<leader>gd', '<cmd>CodeDiff<cr>', desc = 'Git diff' },
-    { '<leader>gD', '<cmd>CodeDiff file HEAD<cr>', desc = 'Diff current file' },
-    { '<leader>gh', '<cmd>CodeDiff history<cr>', desc = 'Git history' },
+    { '<leader>gD', '<cmd>CodeDiff file HEAD<cr>', desc = 'Git diff current buffer' },
+    { '<leader>gl', '<cmd>CodeDiff history<cr>', desc = 'Git log' },
+    { '<leader>gL', '<cmd>CodeDiff history %<cr>', desc = 'Git log current buffer' },
   },
 }

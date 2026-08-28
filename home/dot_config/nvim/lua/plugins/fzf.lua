@@ -20,10 +20,6 @@ return {
     { '<leader>fw', '<cmd>FzfLua grep_cword<cr>', desc = 'Grep word under cursor' },
     { '<leader>f*', '<cmd>FzfLua grep_cword<cr>', desc = 'Grep word under cursor' },
 
-    -- Git
-    { '<leader>gl', '<cmd>FzfLua git_log<cr>', desc = 'Git log' },
-    { '<leader>gL', '<cmd>FzfLua git_bcommits<cr>', desc = 'Git buffer commits' },
-
     -- Code / LSP
     -- Override Neovim's built-in navigation mappings with searchable FzfLua
     -- pickers. grr/gri/grt preserve their default LSP meanings, while gd/gD
