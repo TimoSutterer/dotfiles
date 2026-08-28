@@ -1,5 +1,7 @@
 return {
   'ibhagwan/fzf-lua',
+  -- Disable the fzf picker UI in VS Code; equivalent mappings live in config/keymaps.lua.
+  enabled = function() return not vim.g.vscode end,
   dependencies = { 'nvim-mini/mini.icons' },
   keys = {
     { '<leader><space>', '<cmd>FzfLua global<cr>', desc = 'Fzf global picker' },

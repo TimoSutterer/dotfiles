@@ -1,5 +1,7 @@
 return {
   'christoomey/vim-tmux-navigator',
+  -- Only enable terminal pane navigation outside VS Code.
+  enabled = function() return not vim.g.vscode end,
   cmd = {
     'TmuxNavigateLeft',
     'TmuxNavigateDown',

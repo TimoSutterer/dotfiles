@@ -13,3 +13,16 @@ vim.keymap.set("n", "<BS>", "<C-^>", { silent = true, desc = "Alternate buffer" 
 -- The buffer namespace complements the direct navigation keys above (see also
 -- the fzf-lua buffers section in plugins/fzf.lua).
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { silent = true, desc = "Delete buffer" })
+
+-- Replace the fzf-lua mappings from plugins/fzf.lua with VS Code's native UI.
+if vim.g.vscode then
+  local vscode = require("vscode")
+
+  vim.keymap.set("n", "<leader>ff", function()
+    vscode.action("workbench.action.quickOpen")
+  end, { desc = "Find files" })
+
+  vim.keymap.set("n", "<leader>fg", function()
+    vscode.action("workbench.action.findInFiles")
+  end, { desc = "Grep project" })
+end

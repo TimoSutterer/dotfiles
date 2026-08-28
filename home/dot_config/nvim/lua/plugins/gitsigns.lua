@@ -1,5 +1,7 @@
 return {
   'lewis6991/gitsigns.nvim',
+  -- Only load Git decorations outside VS Code.
+  enabled = function() return not vim.g.vscode end,
   event = { 'BufReadPre', 'BufNewFile' },
   opts = {
     on_attach = function(bufnr)

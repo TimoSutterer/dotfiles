@@ -1,5 +1,7 @@
 return {
   'esmuellert/codediff.nvim',
+  -- Only load the diff UI outside VS Code.
+  enabled = function() return not vim.g.vscode end,
   cmd = 'CodeDiff',
   -- Pin below 2.50. Newer codediff versions return typed Path objects from
   -- get_paths, which review.nvim can't consume. Unpin once

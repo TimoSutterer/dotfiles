@@ -1,5 +1,7 @@
 return {
   'folke/which-key.nvim',
+  -- Only load the keymap popup outside VS Code.
+  enabled = function() return not vim.g.vscode end,
   event = 'VeryLazy',
   opts = {
     delay = 700,
