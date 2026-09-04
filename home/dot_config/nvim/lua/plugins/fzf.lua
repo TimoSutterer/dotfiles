@@ -41,5 +41,15 @@ return {
     { '<leader>fh', '<cmd>FzfLua helptags<cr>', desc = 'Help tags' },
     { '<leader>fk', '<cmd>FzfLua builtin<cr>', desc = 'Fzf-lua builtins' },
   },
-  opts = {},
+  opts = {
+    grep = {
+      -- Include hidden files and directories without including Git-ignored files.
+      -- FzfLua translates `hidden = true` into rg's `--hidden`, which would also make
+      -- .git searchable, so add `--glob "!.git"` to exclude it. Because rg_opts is a
+      -- single replace-only string, repeat FzfLua's defaults along with the new glob.
+      -- This applies to FzfLua's grep-family pickers, not other pickers that use rg.
+      hidden = true,
+      rg_opts = [[--glob "!.git" --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e]],
+    },
+  },
 }
