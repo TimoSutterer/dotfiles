@@ -10,6 +10,7 @@ return {
       { '<leader>f', group = 'Find' },
       { '<leader>g', group = 'Git' },
       { '<leader>gt', group = 'Git toggle' },
+      { '<leader>r', group = 'Review' },
     },
   },
   keys = {
@@ -18,7 +19,7 @@ return {
       function()
         require('which-key').show({ global = false })
       end,
-      desc = 'Buffer keymaps',
+      desc = 'Buffer-local keymaps',
     },
   },
 }
