@@ -20,6 +20,7 @@ RUN apt-get update && \
     curl \
     sudo \
     tmux \
+    tree \
     gnupg \
     bzip2 \
     ripgrep \
