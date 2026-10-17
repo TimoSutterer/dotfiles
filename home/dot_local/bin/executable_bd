@@ -64,7 +64,7 @@ refuse() {
   exit 2
 }
 
-if ! $unguarded; then
+if ! $unguarded && ! has_flag --help && ! has_flag -h; then
   case "$cmd" in
     init)
       has_flag --stealth ||
