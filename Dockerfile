@@ -87,6 +87,21 @@ RUN case "$(dpkg --print-architecture)" in \
     | bunzip2 > /usr/local/bin/lhm \
  && chmod 755 /usr/local/bin/lhm
 
+# Install beads
+# The binary goes off PATH because ~/.local/bin/bd is a wrapper around it
+ARG BEADS_VERSION=1.3.1
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) beads_arch=amd64 ;; \
+      arm64) beads_arch=arm64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
+ && mkdir /tmp/beads \
+ && curl -fsSL \
+    https://github.com/gastownhall/beads/releases/download/v${BEADS_VERSION}/beads_${BEADS_VERSION}_linux_${beads_arch}.tar.gz \
+    | tar -xz -C /tmp/beads bd \
+ && install -D -m 755 /tmp/beads/bd /usr/local/lib/beads/bd \
+ && rm -rf /tmp/beads
+
 # Create a non-root user
 ARG USERNAME=guest
 ARG USER_UID=1000

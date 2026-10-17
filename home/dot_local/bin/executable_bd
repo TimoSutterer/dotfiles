@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# Wrapper around the beads CLI (bd).
+#
+# - Records where each change was made: the actor becomes
+#   <who>@<repo>:<branch>, where <who> is the agent (e.g. pi/<model>) or the
+#   git user name.
+# - Refuses commands that could commit, publish or sync tracker data, unless
+#   --unguarded is passed.
+# - Turns off bd's telemetry, which is on by default.
+#
+# Everything else is passed through unchanged to the real binary.
+
+set -euo pipefail
+
+real_bd="${BEADS_REAL_BD:-/usr/local/lib/beads/bd}"
+self="bd (wrapper at ${BASH_SOURCE[0]})"
+
+# Split off --unguarded, and find the subcommand behind global flags.
+args=()
+unguarded=false
+words=()
+dir="."
+expect_value=""
+for arg in "$@"; do
+  if [[ "$arg" == "--unguarded" ]]; then
+    unguarded=true
+    continue
+  fi
+  args+=("$arg")
+  if [[ -n "$expect_value" ]]; then
+    [[ "$expect_value" == "dir" ]] && dir="$arg"
+    expect_value=""
+  elif [[ "$arg" == "-C" || "$arg" == "--directory" ]]; then
+    expect_value="dir"
+  elif [[ "$arg" == --directory=* ]]; then
+    dir="${arg#--directory=}"
+  elif [[ "$arg" == -C?* ]]; then
+    dir="${arg#-C}"
+  elif [[ "$arg" =~ ^--(actor|database|db|dolt-auto-commit|mem-profile)$ ]]; then
+    expect_value="skip"
+  elif [[ "$arg" != -* && ${#words[@]} -lt 3 ]]; then
+    words+=("$arg")
+  fi
+done
+cmd="${words[0]:-}"
+sub="${words[1]:-}"
+subsub="${words[2]:-}"
+
+# Matches --flag and --flag=<value>.
+has_flag() {
+  local flag
+  for flag in "${args[@]}"; do
+    [[ "$flag" == "$1" || "$flag" == "$1"=* ]] && return 0
+  done
+  return 1
+}
+
+refuse() {
+  {
+    echo "$self: \`bd $1\` is blocked: $2"
+    [[ -z "${3:-}" ]] || echo "  $3"
+    echo "  To run it anyway: bd $1 --unguarded"
+  } >&2
+  exit 2
+}
+
+if ! $unguarded; then
+  case "$cmd" in
+    init)
+      has_flag --stealth ||
+        refuse "init" "it commits .beads/ and installs git hooks." \
+          "Usually you want: bd init --stealth"
+      ;;
+    setup)
+      has_flag --stealth ||
+        refuse "setup${sub:+ $sub}" "it writes agent files into the repo." \
+          "Usually you want: bd setup${sub:+ $sub} --stealth"
+      ;;
+    hooks)
+      [[ "$sub" != "install" ]] ||
+        refuse "hooks install" "it installs git hooks."
+      ;;
+    doctor)
+      ! has_flag --fix ||
+        refuse "doctor --fix" "it may install git hooks." \
+          "Run \`bd doctor\` without --fix to only see the findings."
+      ;;
+    dolt)
+      [[ "$sub $subsub" != "remote add" ]] ||
+        refuse "dolt remote add" "it can publish tracker data to a remote."
+      [[ "$sub" != "push" ]] ||
+        refuse "dolt push" "it publishes tracker data to a remote."
+      ;;
+    sync | federation)
+      refuse "$cmd" "it syncs tracker data with a remote."
+      ;;
+    github | gitlab | ado | jira | linear | notion)
+      refuse "$cmd" "it can copy issues to $cmd."
+      ;;
+  esac
+fi
+
+if [[ -z "${BEADS_ACTOR:-}" ]]; then
+  if [[ "${PI_CODING_AGENT:-}" == "true" ]]; then
+    who="pi/${PI_MODEL:-unknown}"
+  elif [[ "${CLAUDECODE:-}" == "1" ]]; then
+    who="claude-code"
+  else
+    who="$(git -C "$dir" config user.name 2>/dev/null || true)"
+    who="${who:-${USER:-unknown}}"
+  fi
+  actor="$who"
+  if common_dir="$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+    repo="$(basename "$(dirname "$common_dir")")"
+    branch="$(git -C "$dir" symbolic-ref --short -q HEAD ||
+      echo "@$(git -C "$dir" rev-parse --short HEAD 2>/dev/null || echo unborn)")"
+    actor="$who@$repo:$branch"
+  fi
+  export BEADS_ACTOR="$actor"
+fi
+
+export BD_DISABLE_METRICS=1
+exec "$real_bd" "${args[@]}"
