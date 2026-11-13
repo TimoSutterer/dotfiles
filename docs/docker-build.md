@@ -29,7 +29,7 @@ docker build \
   --build-arg USER_GID=$(id -g) \
   --build-arg NVM_VERSION=0.41.0 \
   --build-arg NODE_VERSION=26.13.1 \
-  --build-arg UV_VERSION=0.11.16 \
+  --build-arg UV_VERSION=0.13.8 \
   --build-arg NVIM_VERSION=v0.12.6 \
   --build-arg DELTA_VERSION=0.20.1 \
   --build-arg LEFTHOOK_VERSION=2.2.2 \
