@@ -1,3 +1,14 @@
+local function since_base_branch()
+  local git = require('config.git')
+  local branch = git.first_line({ 'branch', '--show-current' })
+  local base = git.base_branch()
+  if not (branch and base) then
+    vim.notify('No current branch or base branch', vim.log.levels.WARN)
+    return
+  end
+  vim.cmd(('Review branch %s %s'):format(branch, base))
+end
+
 return {
   'georgeguimaraes/review.nvim',
   -- Only load the review UI outside VS Code.
@@ -9,8 +20,9 @@ return {
   },
   cmd = { 'Review' },
   keys = {
-    { '<leader>rr', '<cmd>Review<cr>', desc = 'Review working tree' },
-    { '<leader>rc', '<cmd>Review commits<cr>', desc = 'Review commits' },
+    { '<leader>rvu', '<cmd>Review<cr>', desc = 'Review uncommitted' },
+    { '<leader>rvc', '<cmd>Review commits<cr>', desc = 'Review commits' },
+    { '<leader>rvb', since_base_branch, desc = 'Review since split from base branch' },
   },
   opts = {},
 }

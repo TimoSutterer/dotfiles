@@ -9,8 +9,12 @@ return {
       { '<leader>b', group = 'Buffer' },
       { '<leader>f', group = 'Find' },
       { '<leader>g', group = 'Git' },
+      { '<leader>gc', group = 'CodeDiff' },
       { '<leader>gt', group = 'Git toggle' },
+      { '<leader>gv', group = 'Diffview' },
       { '<leader>r', group = 'Review' },
+      { '<leader>rv', group = 'review.nvim' },
+      { '<leader>t', group = 'Tree' },
     },
   },
   keys = {
