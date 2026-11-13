@@ -27,12 +27,12 @@ docker build \
   --build-arg USERNAME=$(whoami) \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
-  --build-arg NVM_VERSION=0.40.4 \
+  --build-arg NVM_VERSION=0.41.0 \
   --build-arg NODE_VERSION=24.16.0 \
   --build-arg UV_VERSION=0.11.16 \
-  --build-arg NVIM_VERSION=v0.12.2 \
-  --build-arg DELTA_VERSION=0.19.2 \
-  --build-arg LEFTHOOK_VERSION=2.1.9 \
+  --build-arg NVIM_VERSION=v0.12.6 \
+  --build-arg DELTA_VERSION=0.20.1 \
+  --build-arg LEFTHOOK_VERSION=2.2.2 \
   --build-arg LHM_VERSION=v0.11.1 \
   --build-arg BEADS_VERSION=1.3.1 \
   --build-arg CHEZMOI_REPO=TimoSutterer \

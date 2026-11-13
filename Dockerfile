@@ -39,7 +39,7 @@ ENV LC_ALL=en_US.UTF-8
 # Install Neovim
 # Neovim is installed from the pre-build archive because the version in the
 # Debian repository is outdated
-ARG NVIM_VERSION=v0.12.2
+ARG NVIM_VERSION=v0.12.6
 RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
     rm -rf /opt/nvim && \
     tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
@@ -48,7 +48,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/
 ENV PATH=/opt/nvim-linux-x86_64/bin:$PATH
 
 # Install delta
-ARG DELTA_VERSION=0.19.2
+ARG DELTA_VERSION=0.20.1
 RUN apt-get update \
  && apt-get install -y curl dpkg less ca-certificates \
  && case "$(dpkg --print-architecture)" in \
@@ -63,7 +63,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* /tmp/delta.deb
 
 # Install lefthook
-ARG LEFTHOOK_VERSION=2.1.9
+ARG LEFTHOOK_VERSION=2.2.2
 RUN case "$(dpkg --print-architecture)" in \
       amd64) lefthook_arch=amd64 ;; \
       arm64) lefthook_arch=arm64 ;; \
@@ -160,7 +160,7 @@ ENV XDG_CONFIG_HOME=$HOME/.config \
 RUN mkdir -p $XDG_CONFIG_HOME $XDG_DATA_HOME $XDG_CACHE_HOME $XDG_STATE_HOME $XDG_RUNTIME_DIR
 
 # Install nvm, Node.js and npm
-ARG NVM_VERSION=0.40.4
+ARG NVM_VERSION=0.41.0
 ARG NODE_VERSION=24.16.0
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash && \
     # Set the NVM_DIR environment variable
