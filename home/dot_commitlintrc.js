@@ -5,7 +5,7 @@ module.exports = {
     'header-max-length-warning': [1, 'always', 50],
     // Error if subject is longer than 72 characters
     'header-max-length': [2, 'always', 72],
-    // Wrap body at 72 characters
+    // Wrap body at 72 characters; lines with a URL are exempt
     'body-max-line-length': [2, 'always', 72],
     // Require a blank line before the body
     'body-leading-blank': [2, 'always'],

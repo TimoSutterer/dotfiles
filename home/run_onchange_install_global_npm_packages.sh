@@ -15,9 +15,9 @@ fi
 # Commit message linting
 # Make sure to keep in sync with the versions in package.json and
 # package-lock.json to avoid conflicts with GitHub Actions workflows.
-npm install -g @commitlint/cli@19.6.1 @commitlint/config-conventional@19.6.0
+npm install -g @commitlint/cli@21.2.4 @commitlint/config-conventional@21.2.4
 
 # Interactive Commitizen CLI
-npm install -g czg@1.11.1
+npm install -g czg@1.14.0
 
 echo "Global npm packages installed."
