@@ -76,7 +76,7 @@ RUN case "$(dpkg --print-architecture)" in \
  && rm -f /tmp/lefthook.deb
 
 # Install lhm
-ARG LHM_VERSION=v0.11.1
+ARG LHM_VERSION=v0.14.1
 RUN case "$(dpkg --print-architecture)" in \
       amd64) lhm_arch=x86_64 ;; \
       arm64) lhm_arch=aarch64 ;; \

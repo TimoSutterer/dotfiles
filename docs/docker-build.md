@@ -33,7 +33,7 @@ docker build \
   --build-arg NVIM_VERSION=v0.12.6 \
   --build-arg DELTA_VERSION=0.20.1 \
   --build-arg LEFTHOOK_VERSION=2.2.2 \
-  --build-arg LHM_VERSION=v0.11.1 \
+  --build-arg LHM_VERSION=v0.14.1 \
   --build-arg BEADS_VERSION=1.3.1 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .
