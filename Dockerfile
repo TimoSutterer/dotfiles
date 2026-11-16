@@ -103,6 +103,24 @@ RUN case "$(dpkg --print-architecture)" in \
  && install -D -m 755 /tmp/beads/bd /usr/local/lib/beads/bd \
  && rm -rf /tmp/beads
 
+# Install workmux
+ARG WORKMUX_VERSION=0.1.282
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) workmux_arch=amd64 ;; \
+      arm64) workmux_arch=arm64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
+ && mkdir /tmp/workmux \
+ && curl -fsSL \
+    https://github.com/raine/workmux/releases/download/v${WORKMUX_VERSION}/workmux-linux-${workmux_arch}.tar.gz \
+    -o /tmp/workmux/workmux-linux-${workmux_arch}.tar.gz \
+ && curl -fsSL \
+    https://github.com/raine/workmux/releases/download/v${WORKMUX_VERSION}/workmux-linux-${workmux_arch}.sha256 \
+    | sed 's|  |  /tmp/workmux/|' | sha256sum -c \
+ && tar -xzf /tmp/workmux/workmux-linux-${workmux_arch}.tar.gz -C /tmp/workmux workmux \
+ && install -m 755 /tmp/workmux/workmux /usr/local/bin/workmux \
+ && rm -rf /tmp/workmux
+
 # Create a non-root user
 ARG USERNAME=guest
 ARG USER_UID=1000

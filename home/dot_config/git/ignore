@@ -85,3 +85,9 @@ tags
 
 # https://lefthook.dev/configuration/source_dir_local.html
 /.lefthook-local/
+
+###
+# workmux
+# https://workmux.dev/guide/configuration/#basic-options
+###
+*__worktrees/

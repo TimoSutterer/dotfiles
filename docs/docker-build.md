@@ -35,6 +35,7 @@ docker build \
   --build-arg LEFTHOOK_VERSION=2.2.2 \
   --build-arg LHM_VERSION=v0.14.1 \
   --build-arg BEADS_VERSION=1.3.1 \
+  --build-arg WORKMUX_VERSION=0.1.282 \
   --build-arg CHEZMOI_REPO=TimoSutterer \
   -t dotfiles .
 ```
@@ -50,6 +51,7 @@ docker build \
 - **LEFTHOOK_VERSION** - Lefthook version to install
 - **LHM_VERSION** - lhm version to install
 - **BEADS_VERSION** - beads version to install
+- **WORKMUX_VERSION** - workmux version to install
 - **CHEZMOI_REPO** - GitHub repo for chezmoi, use empty string for [local repository](#using-local-repository)
 
 > **Important:** Setting the USERNAME, USER_UID, and USER_GID is particularly important when mounting directories from your host system. Learn more about [Docker Mounts and Permissions](docker-mounts.md).
