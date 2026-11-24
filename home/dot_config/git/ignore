@@ -1,4 +1,9 @@
 ###
+# Scratch folder: temporary files that never get committed
+###
+.scratch/
+
+###
 # GPG
 # https://github.com/github/gitignore/blob/10b26ce43da9337f75fb3d4e8d034c4a30ea6f96/Global/GPG.gitignore
 ###
