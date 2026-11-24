@@ -26,6 +26,7 @@ RUN apt-get update && \
     bzip2 \
     ripgrep \
     fd-find \
+    libatomic1 \
     locales && \
     # Clean up apt cache to reduce image size
     apt-get clean && \
