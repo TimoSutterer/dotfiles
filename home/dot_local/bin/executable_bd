@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Wrapper around the beads CLI (bd).
 #
-# - Records where each change was made: the actor becomes
-#   <who>@<repo>:<branch>, where <who> is the agent (e.g. pi/<model>) or the
-#   git user name.
+# - Records who made each change: an agent's actor becomes
+#   <agent>@<repo>:<branch> (e.g. pi/<model>@<repo>:<branch>), a human's is
+#   their plain login name ($USER, else `id -un`), so the same person has the
+#   same actor everywhere.
 # - Refuses commands that could commit, publish or sync tracker data, unless
 #   --unguarded is passed.
 # - Turns off bd's telemetry, which is on by default.
@@ -106,15 +107,17 @@ if [[ -z "${BEADS_ACTOR:-}" ]]; then
   elif [[ "${CLAUDECODE:-}" == "1" ]]; then
     who="claude-code"
   else
-    who="$(git -C "$dir" config user.name 2>/dev/null || true)"
-    who="${who:-${USER:-unknown}}"
+    who=""
   fi
-  actor="$who"
-  if common_dir="$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+  if [[ -z "$who" ]]; then
+    actor="${USER:-$(id -un 2>/dev/null || echo unknown)}"
+  elif common_dir="$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
     repo="$(basename "$(dirname "$common_dir")")"
     branch="$(git -C "$dir" symbolic-ref --short -q HEAD ||
       echo "@$(git -C "$dir" rev-parse --short HEAD 2>/dev/null || echo unborn)")"
     actor="$who@$repo:$branch"
+  else
+    actor="$who"
   fi
   export BEADS_ACTOR="$actor"
 fi
