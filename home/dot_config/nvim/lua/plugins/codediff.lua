@@ -2,8 +2,9 @@
 -- latest state; both include untracked files.
 local function against_base_branch(latest)
   return function()
-    local base = require('config.git').require_base_branch()
-    if base then vim.cmd('CodeDiff ' .. base .. (latest and '' or '...')) end
+    require('config.git').compare_base_branch(latest, function(base)
+      vim.cmd('CodeDiff ' .. base .. (latest and '' or '...'))
+    end)
   end
 end
 

@@ -1,12 +1,12 @@
 local function since_base_branch()
   local git = require('config.git')
   local branch = git.first_line({ 'branch', '--show-current' })
-  local base = git.base_branch()
-  if not (branch and base) then
-    vim.notify('No current branch or base branch', vim.log.levels.WARN)
+  if not branch or branch == '' then
+    vim.notify('No current branch', vim.log.levels.WARN)
     return
   end
-  vim.cmd(('Review branch %s %s'):format(branch, base))
+  -- Review branch on the current branch diffs `base...`, the split point.
+  git.compare_base_branch(false, function(base) vim.cmd(('Review branch %s %s'):format(branch, base)) end)
 end
 
 return {

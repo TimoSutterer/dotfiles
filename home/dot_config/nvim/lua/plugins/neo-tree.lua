@@ -3,25 +3,10 @@ local git = require('config.git')
 -- neo-tree's git_base runs a two-dot `git diff <base> HEAD`, which compares
 -- with the ref's latest state; the split point limits it to what this branch
 -- changed since it split off. Lowercase keys use the split point.
-local function show_against(ref, latest)
-  local base = latest and ref or git.first_line({ 'merge-base', ref, 'HEAD' })
-  if not base then
-    vim.notify('No split point from ' .. ref, vim.log.levels.WARN)
-    return
-  end
-  vim.cmd('Neotree git_status git_base=' .. base)
-  if latest then
-    vim.notify(('neo-tree: differences to %s latest'):format(ref))
-  else
-    vim.notify(('neo-tree: changes since split from %s at %s'):format(ref, base:sub(1, 8)))
-  end
-end
+local function show(_, commit) vim.cmd('Neotree git_status git_base=' .. commit) end
 
 local function against_base_branch(latest)
-  return function()
-    local base = git.require_base_branch()
-    if base then show_against(base, latest) end
-  end
+  return function() git.compare_base_branch(latest, show) end
 end
 
 local function against_picked_branch(latest)
@@ -31,7 +16,12 @@ local function against_picked_branch(latest)
       prompt = (latest and 'Differences to latest of> ' or 'Changes since split from> '),
       actions = {
         default = function(selected)
-          if selected and selected[1] then show_against(selected[1], latest) end
+          local ref = selected and selected[1]
+          if not ref then return end
+          local function compare() git.compare(ref, latest, 'Base: ' .. ref .. ' (picked)', show) end
+          -- fzf-lua runs this still in terminal mode; leaving it would clear the notice.
+          if vim.api.nvim_get_mode().mode ~= 't' then return compare() end
+          vim.api.nvim_create_autocmd('ModeChanged', { pattern = 't:*', once = true, callback = compare })
         end,
       },
     })
