@@ -20,5 +20,10 @@ if [ ! -f "${ZINIT_HOME}/zinit.zsh" ] && [ -d "${ZINIT_HOME}/.git" ]; then
     cd "$ZINIT_HOME" && git pull
 fi
 
+# Skip zinit's short aliases (zi, zini, zpl, zplg): its `zi` alias would
+# override zoxide's `zi` picker. Call zinit by its full name.
+typeset -gA ZINIT
+ZINIT[NO_ALIASES]=1
+
 # Source the zinit script to initialize the plugin manager
 source "${ZINIT_HOME}/zinit.zsh"

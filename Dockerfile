@@ -26,6 +26,7 @@ RUN apt-get update && \
     bzip2 \
     ripgrep \
     fd-find \
+    zoxide \
     libatomic1 \
     locales && \
     # Clean up apt cache to reduce image size
@@ -121,6 +122,25 @@ RUN case "$(dpkg --print-architecture)" in \
  && tar -xzf /tmp/workmux/workmux-linux-${workmux_arch}.tar.gz -C /tmp/workmux workmux \
  && install -m 755 /tmp/workmux/workmux /usr/local/bin/workmux \
  && rm -rf /tmp/workmux
+
+# Install sesh
+ARG SESH_VERSION=2.34.0
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) sesh_arch=x86_64 ;; \
+      arm64) sesh_arch=arm64 ;; \
+      *) echo "Unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac \
+ && mkdir /tmp/sesh \
+ && curl -fsSL \
+    https://github.com/joshmedeski/sesh/releases/download/v${SESH_VERSION}/sesh_Linux_${sesh_arch}.tar.gz \
+    -o /tmp/sesh/sesh_Linux_${sesh_arch}.tar.gz \
+ && curl -fsSL \
+    https://github.com/joshmedeski/sesh/releases/download/v${SESH_VERSION}/sesh_${SESH_VERSION}_checksums.txt \
+    | grep " sesh_Linux_${sesh_arch}.tar.gz$" \
+    | sed 's|  |  /tmp/sesh/|' | sha256sum -c \
+ && tar -xzf /tmp/sesh/sesh_Linux_${sesh_arch}.tar.gz -C /tmp/sesh sesh \
+ && install -m 755 /tmp/sesh/sesh /usr/local/bin/sesh \
+ && rm -rf /tmp/sesh
 
 # Create a non-root user
 ARG USERNAME=guest
@@ -232,5 +252,5 @@ RUN nvim --headless "+Lazy! sync" +qa
 # Set the entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-# Set the default command to start or attach to a tmux session named 'default'
-CMD ["tmux", "new-session", "-A", "-s", "default"]
+# Set the default command to start or attach to a tmux session named 'home'
+CMD ["tmux", "new-session", "-A", "-s", "home"]
